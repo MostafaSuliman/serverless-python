@@ -13,11 +13,6 @@ Resources:
       Timeout: 3
       Role: 'arn:aws:iam::760144776757:role/service-role/serverless-py-role-a6x14aia'
       Events:
-        SNS1:
-          Type: SNS
-          Properties:
-            Topic:
-              Ref: SNSTopic1
         SQS1:
           Type: SQS
           Properties:
@@ -26,8 +21,18 @@ Resources:
                 - SQSQueue1
                 - Arn
             BatchSize: 10
-  SNSTopic1:
-    Type: 'AWS::SNS::Topic'
+        Api1:
+          Type: Api
+          Properties:
+            Path: /serverless-py
+            Method: ANY
+        SNS1:
+          Type: SNS
+          Properties:
+            Topic:
+              Ref: SNSTopic1
   SQSQueue1:
     Type: 'AWS::SQS::Queue'
     Properties: {}
+  SNSTopic1:
+    Type: 'AWS::SNS::Topic'
