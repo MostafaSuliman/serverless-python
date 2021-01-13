@@ -74,7 +74,7 @@
     "ReceiverLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/python-serverless-serverless-python-beta-receiver"
+        "LogGroupName": "/aws/lambda/python-serverless-beta-receiver"
       }
     },
     "IamRoleLambdaExecution": {
@@ -103,7 +103,7 @@
                 "-",
                 [
                   "python-serverless",
-                  "serverless-python-beta",
+                  "beta",
                   "lambda"
                 ]
               ]
@@ -119,7 +119,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/python-serverless-serverless-python-beta*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/python-serverless-beta*:*"
                     }
                   ]
                 },
@@ -130,7 +130,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/python-serverless-serverless-python-beta*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/python-serverless-beta*:*:*"
                     }
                   ]
                 },
@@ -157,7 +157,7 @@
             "-",
             [
               "python-serverless",
-              "serverless-python-beta",
+              "beta",
               {
                 "Ref": "AWS::Region"
               },
@@ -174,11 +174,11 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/python-serverless/serverless-python-beta/1610550466960-2021-01-13T15:07:46.960Z/python-serverless.zip"
+          "S3Key": "serverless/python-serverless/beta/1610560568992-2021-01-13T17:56:08.992Z/python-serverless.zip"
         },
         "Handler": "handler.receiver",
         "Runtime": "python3.7",
-        "FunctionName": "python-serverless-serverless-python-beta-receiver",
+        "FunctionName": "python-serverless-beta-receiver",
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
@@ -192,14 +192,14 @@
         "ReceiverLogGroup"
       ]
     },
-    "ReceiverLambdaVersionODD2HhJuzG8ghUHQMwu7rStezmRzwx8sQJo94MKUmls": {
+    "ReceiverLambdaVersionQ1rW8gQqwDeISgN5lQdD11hAkPlbyVKe2ut0ITVY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverLambdaFunction"
         },
-        "CodeSha256": "do/ImW5X7WUlbWiPUL8KiRG9wiylDJQMWR0/r/YeRcM="
+        "CodeSha256": "oMPFNEJQaaEgeKLoWrvOxNEWpeeXajX1SJzZCMpNBcE="
       }
     },
     "ReceiverEventSourceMappingSQSServerlesspythonbetaSqsQueue": {
@@ -231,7 +231,7 @@
     "ReceiverLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverLambdaVersionODD2HhJuzG8ghUHQMwu7rStezmRzwx8sQJo94MKUmls"
+        "Ref": "ReceiverLambdaVersionQ1rW8gQqwDeISgN5lQdD11hAkPlbyVKe2ut0ITVY"
       }
     }
   }

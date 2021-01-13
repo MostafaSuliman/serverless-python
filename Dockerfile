@@ -17,4 +17,4 @@ ARG region
 RUN npm install -g serverless
 RUN serverless config credentials --provider aws --key AKIA3B7BIZY2RVSQIAUR --secret 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
 COPY . /
-CMD serverless deploy -v --stage $stack --region $region
+CMD serverless deploy -v --stack $stack --region $region
