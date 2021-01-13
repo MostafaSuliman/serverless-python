@@ -18,4 +18,4 @@ RUN mkdir /serverless
 ENV G=/serverless
 COPY . $G
 RUN cd $G
-CMD serverless deploy
+CMD serverless deploy -v --stage  $STAGE --region  $REGION
