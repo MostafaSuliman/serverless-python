@@ -141,7 +141,7 @@ Resources:
                 Owner: !Ref GithubOwner
                 Repo: !Ref GithubRepo
                 Branch: !Ref GithubBranch
-                PollForSourceChanges: true
+                # PollForSourceChanges: true
               OutputArtifacts: 
                 - Name: SourceArtifact
         - Name: Build
