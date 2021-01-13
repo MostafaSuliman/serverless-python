@@ -18,15 +18,15 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION  -t cf-$SERVICE_NAME -f CF.Dockerfile .
-      - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION  -t $SERVICE_NAME -f Dockerfile .
+      - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION --build-arg=$Stack  -t cf-$SERVICE_NAME -f CF.Dockerfile .
+      - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION --build-arg=$Stack  -t $SERVICE_NAME -f Dockerfile .
   post_build:
     commands:
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
       - echo Build stage successfully completed on `date`
       - echo Run the Docker image...
-      - docker run  --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY   -e STAGE=$STAGE -e REGION=$REGION cf-$SERVICE_NAME
-      - docker run  --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY   -e STAGE=$STAGE -e REGION=$REGION  $SERVICE_NAME
+      - docker run  --rm -e stack=$stack  -e STAGE=$STAGE -e REGION=$REGION cf-$SERVICE_NAME
+      - docker run  --rm -e stack=$stack  -e STAGE=$STAGE -e REGION=$REGION  $SERVICE_NAME
       - printf '[{"name":"%s","imageUri":"%s"}]' "$SERVICE_NAME" "$IMAGE_URI" > "$SERVICE_NAME"-images.json
 artifacts:
   files: $SERVICE_NAME-images.json

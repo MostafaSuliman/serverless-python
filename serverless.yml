@@ -8,7 +8,6 @@ provider:
   runtime: python3.7
   stage: beta
   region: us-east-2 
-  environment:
     
    
 functions:
@@ -18,7 +17,7 @@ functions:
     events:
       - sqs:
           arn:
-            Fn::ImportValue:  ${opt:stage}:SqsQueue
+            Fn::ImportValue:  ${opt:stack}:SqsQueue
 
 
  
