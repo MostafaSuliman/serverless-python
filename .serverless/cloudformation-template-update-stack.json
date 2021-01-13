@@ -174,7 +174,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/python-serverless/beta/1610560568992-2021-01-13T17:56:08.992Z/python-serverless.zip"
+          "S3Key": "serverless/python-serverless/beta/1610561941466-2021-01-13T18:19:01.466Z/python-serverless.zip"
         },
         "Handler": "handler.receiver",
         "Runtime": "python3.7",
@@ -192,14 +192,14 @@
         "ReceiverLogGroup"
       ]
     },
-    "ReceiverLambdaVersionQ1rW8gQqwDeISgN5lQdD11hAkPlbyVKe2ut0ITVY": {
+    "ReceiverLambdaVersionmqmrwov9cjrUNM5UPVeH5iZcNDJHgmpycJQPw7k68bE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverLambdaFunction"
         },
-        "CodeSha256": "oMPFNEJQaaEgeKLoWrvOxNEWpeeXajX1SJzZCMpNBcE="
+        "CodeSha256": "bd80msLq3MVNO9osDcSlfhtdiOZ0q6rgex+NjUfqFUE="
       }
     },
     "ReceiverEventSourceMappingSQSServerlesspythonbetaSqsQueue": {
@@ -231,7 +231,7 @@
     "ReceiverLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverLambdaVersionQ1rW8gQqwDeISgN5lQdD11hAkPlbyVKe2ut0ITVY"
+        "Ref": "ReceiverLambdaVersionmqmrwov9cjrUNM5UPVeH5iZcNDJHgmpycJQPw7k68bE"
       }
     }
   }
