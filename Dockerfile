@@ -13,8 +13,8 @@ RUN apt-get update \
   && pip3 install --upgrade pip
 
 ARG stack
-ARG region
+ARG REGION
 RUN npm install -g serverless
 RUN serverless config credentials --provider aws --key AKIA3B7BIZY2RVSQIAUR --secret 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
 COPY . /
-CMD serverless deploy -v --stack $stack --region $region
+CMD serverless deploy -v --stack $stack --REGION $region
