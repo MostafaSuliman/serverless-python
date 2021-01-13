@@ -19,7 +19,7 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION  -t cf-$SERVICE_NAME -f CF.Dockerfile .
-      - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION  -t $SERVICE_NAME -f SL.Dockerfile .
+      - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION  -t $SERVICE_NAME -f Dockerfile .
   post_build:
     commands:
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"

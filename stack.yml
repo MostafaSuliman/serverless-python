@@ -4,7 +4,7 @@ Parameters:
 
   GithubToken:
     Type: String
-    Default: bee72a7b215ee33a14ca2dbcd0051ea718c280d3
+    Default: cf78b28aa2a6e16237ab23517df093fb7a760f2c
     Description: Github Personal access tokens
   GithubOwner:
     Type: String
@@ -12,7 +12,7 @@ Parameters:
     Description: Github Repo Owner
   GithubRepo:
     Type: String
-    Default: halan360-api
+    Default: serverless-python
     Description: Github Repo
   GithubBranch:
     Type: String
@@ -20,7 +20,7 @@ Parameters:
     Description: Github Branch
   ServiceName:
     Type: String
-    Default: python-serverless
+    Default: serverless-python
     Description: Service Name
   stage:
     Type: String
@@ -32,7 +32,7 @@ Parameters:
     Description: serverless region
   PipeLineName:
     Type: String
-    Default: 'serverless-python-beta'
+    Default: serverless-python
     Description: Pipeline Name
 
 Resources:  
@@ -181,7 +181,7 @@ Resources:
         ComputeType: BUILD_GENERAL1_SMALL
         EnvironmentVariables: 
           - Name: AWS_ACCOUNT_ID
-            Value: 624792314775
+            Value: 760144776757
             Type: PLAINTEXT
           - Name: SERVICE_NAME
             Value: !Ref ServiceName
