@@ -192,6 +192,8 @@ Resources:
           - Name: STAGE
             Value: !Ref stage
             Type: PLAINTEXT
+          - Name: stack
+            Value: !Ref AWS::StackName
           - Name: REGION
             Value: !Ref region
             Type: PLAINTEXT
