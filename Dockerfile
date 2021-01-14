@@ -14,7 +14,9 @@ RUN apt-get update \
 
 ARG stack
 ARG REGION
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
 RUN npm install -g serverless
-RUN serverless config credentials --provider aws --key AKIA3B7BIZY2RVSQIAUR --secret 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
+RUN serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
 COPY . /
 CMD serverless deploy -v --stack $stack --REGION $REGION

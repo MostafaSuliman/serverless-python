@@ -10,6 +10,9 @@ Parameters:
     Type: String
     Default: MostafaSuliman
     Description: Github Repo Owner
+  ParentStackName:
+    Type: String
+    Default: Halan-stack-Infra-Z6NVLMYJB5XV
   GithubRepo:
     Type: String
     Default: serverless-python
@@ -34,89 +37,107 @@ Parameters:
     Type: String
     Default: serverless-python
     Description: Pipeline Name
+  AwsAccessKeyID:
+    Type: String
+    Default: AKIA3B7BIZY2RVSQIAUR
+  AwsSecretAccessKey:
+    Type: String
+    Default: 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
+
 
 Resources:  
   ArtifactBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
-    Properties:
-      BucketName: !Join [ "-", [ !Ref ServiceName , !Ref stage ] ] 
 
-  CodePipelineServiceRole:
-    Type: AWS::IAM::Role
-    Properties:
-      Path: /
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: codepipeline.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: root
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Resource: '*'
-                Effect: Allow
-                Action:
-                  - s3:PutObject
-                  - s3:GetObject
-                  - s3:GetObjectVersion
-                  - s3:GetBucketVersioning
-              - Resource: "*"
-                Effect: Allow
-                Action:
-                  - ecs:DescribeServices
-                  - ecs:DescribeTaskDefinition
-                  - ecs:DescribeTasks
-                  - ecs:ListTasks
-                  - ecs:RegisterTaskDefinition
-                  - ecs:UpdateService
-                  - codebuild:StartBuild
-                  - codebuild:BatchGetBuilds
-                  - iam:PassRole  
 
-  CodeBuildServiceRole:
-    Type: AWS::IAM::Role
-    Properties:
-      Path: /
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: codebuild.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: root
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Resource: "*"
-                Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                  - ecr:GetAuthorizationToken
-              - Resource: '*'
-                Effect: Allow
-                Action:
-                  - s3:GetObject
-                  - s3:PutObject
-                  - s3:GetObjectVersion
-              - Resource: '*'
-                Effect: Allow
-                Action:
-                  - ecr:GetDownloadUrlForLayer
-                  - ecr:BatchGetImage
-                  - ecr:BatchCheckLayerAvailability
-                  - ecr:PutImage
-                  - ecr:InitiateLayerUpload
-                  - ecr:UploadLayerPart
-                  - ecr:CompleteLayerUpload
+  # CodePipelineServiceRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     Path: /
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service: codepipeline.amazonaws.com
+  #           Action: sts:AssumeRole
+  #     Policies:
+  #       - PolicyName: root
+  #         PolicyDocument:
+  #           Version: 2012-10-17
+  #           Statement:
+  #             - Resource: '*'
+  #               Effect: Allow
+  #               Action:
+  #                 - s3:PutObject
+  #                 - s3:GetObject
+  #                 - s3:GetObjectVersion
+  #                 - s3:GetBucketVersioning
+  #             - Resource: "*"
+  #               Effect: Allow
+  #               Action:
+  #                 - ecs:DescribeServices
+  #                 - ecs:DescribeTaskDefinition
+  #                 - ecs:DescribeTasks
+  #                 - ecs:ListTasks
+  #                 - ecs:RegisterTaskDefinition
+  #                 - ecs:UpdateService
+  #                 - codebuild:StartBuild
+  #                 - codebuild:BatchGetBuilds
+  #                 - iam:PassRole
+  #                 - iam:TagRole
+  #                 - iam:TagUser	
+  #                 - iam:ListRoleTags
+  #                 - iam:ListUserTags
+  #                 - iam:UntagUser
+  #                 - iam:UntagRole
+
+  # CodeBuildServiceRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     Path: /
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service: codebuild.amazonaws.com
+  #           Action: sts:AssumeRole
+  #     Policies:
+  #       - PolicyName: root
+  #         PolicyDocument:
+  #           Version: 2012-10-17
+  #           Statement:
+  #             - Resource: "*"
+  #               Effect: Allow
+  #               Action:
+  #                 - logs:CreateLogGroup
+  #                 - logs:CreateLogStream
+  #                 - logs:PutLogEvents
+  #                 - ecr:GetAuthorizationToken
+  #                 - iam:TagRole
+  #                 - iam:TagUser	
+  #                 - iam:ListRoleTags
+  #                 - iam:ListUserTags
+  #                 - iam:UntagUser
+  #                 - iam:UntagRole
+  #             - Resource: '*'
+  #               Effect: Allow
+  #               Action:
+  #                 - s3:GetObject
+  #                 - s3:PutObject
+  #                 - s3:GetObjectVersion
+  #             - Resource: '*'
+  #               Effect: Allow
+  #               Action:
+  #                 - ecr:GetDownloadUrlForLayer
+  #                 - ecr:BatchGetImage
+  #                 - ecr:BatchCheckLayerAvailability
+  #                 - ecr:PutImage
+  #                 - ecr:InitiateLayerUpload
+  #                 - ecr:UploadLayerPart
+  #                 - ecr:CompleteLayerUpload
        
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -125,7 +146,9 @@ Resources:
         Type: S3
         Location: !Ref ArtifactBucket
       Name: !Ref PipeLineName
-      RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      RoleArn: 
+        Fn::ImportValue:
+          !Join [':', [!Ref 'ParentStackName', 'CodePipelineServiceRole']]
       Stages: 
         - Name: Source
           Actions: 
@@ -164,7 +187,9 @@ Resources:
     Type: AWS::CodeBuild::Project
     Properties:
       Name: !Ref PipeLineName
-      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+      ServiceRole:           
+        Fn::ImportValue:
+          !Join [':', [!Ref 'ParentStackName', 'CodeBuildServiceRole']]
       Source:
         Type: CODEPIPELINE
         InsecureSsl: false
@@ -197,53 +222,16 @@ Resources:
           - Name: REGION
             Value: !Ref region
             Type: PLAINTEXT
+          - Name: AWS_ACCESS_KEY_ID
+            Value: !Ref AwsAccessKeyID
+            Type: PLAINTEXT
+          - Name: AWS_SECRET_ACCESS_KEY
+            Value: !Ref AwsSecretAccessKey
+            Type: PLAINTEXT
+
  
         PrivilegedMode: true
       TimeoutInMinutes: 60
       QueuedTimeoutInMinutes: 480
-    
-  MySqsQueue:
-    Type: AWS::SQS::Queue
-
-  MySnsTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      Subscription:
-        - Protocol: sqs
-          Endpoint: !GetAtt MySqsQueue.Arn
-  SnsToSqsPolicy:
-    Type: AWS::SQS::QueuePolicy
-    Properties:
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Sid: "Allow SNS publish to SQS"
-            Effect: Allow
-            Principal: "*"
-            Resource: !GetAtt MySqsQueue.Arn
-            Action: SQS:SendMessage
-            Condition:
-              ArnEquals:
-                aws:SourceArn: !Ref MySnsTopic
-      Queues:
-        - Ref: MySqsQueue
-  QueueSubcription:
-    Type: 'AWS::SNS::Subscription'
-    Properties:
-      TopicArn: !Ref MySnsTopic
-      Endpoint: !GetAtt MySqsQueue.Arn
-      Protocol: sqs
-Outputs:
-  SqsQueue:
-    Value:
-      Fn::GetAtt:
-        - MySqsQueue
-        - Arn
-    Export:
-      Name:
-        Fn::Join:
-          - ':'
-          - - Ref: AWS::StackName
-            - SqsQueue
  
 
