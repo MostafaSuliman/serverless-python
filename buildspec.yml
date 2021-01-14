@@ -20,7 +20,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION AWS_ACCESS_KEY_ID= -t $SERVICE_NAME .
+      - docker build --build-arg STAGE=$STAGE  --build-arg REGION=$REGION --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -t $SERVICE_NAME .
   post_build:
     commands:
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
