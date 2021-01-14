@@ -19,4 +19,4 @@ ARG AWS_SECRET_ACCESS_KEY
 RUN npm install -g serverless
 RUN serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
 COPY . /
-CMD serverless deploy -v --stack $stack --REGION $REGION
+CMD serverless deploy -v --REGION $REGION

@@ -17,7 +17,7 @@ functions:
     events:
       - sqs:
           arn: !GetAtt MySqsQueue.Arn
-resource:
+resources:
   Resources:
     MySqsQueue:
       Type: AWS::SQS::Queue

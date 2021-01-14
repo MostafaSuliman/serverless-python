@@ -156,7 +156,10 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::ImportValue": "serverless-python-beta:SqsQueue"
+                            "Fn::GetAtt": [
+                              "MySqsQueue",
+                              "Arn"
+                            ]
                           }
                         ]
                       }
@@ -187,7 +190,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/python-serverless/beta/1610561941466-2021-01-13T18:19:01.466Z/python-serverless.zip"
+                "S3Key": "serverless/python-serverless/beta/1610629938448-2021-01-14T13:12:18.448Z/python-serverless.zip"
               },
               "Handler": "handler.receiver",
               "Runtime": "python3.7",
@@ -205,17 +208,17 @@
               "ReceiverLogGroup"
             ]
           },
-          "ReceiverLambdaVersionmqmrwov9cjrUNM5UPVeH5iZcNDJHgmpycJQPw7k68bE": {
+          "ReceiverLambdaVersiona2bCGNx0JnDjFQ5e4Td8iTp73oYmeM9iDW38erQU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ReceiverLambdaFunction"
               },
-              "CodeSha256": "bd80msLq3MVNO9osDcSlfhtdiOZ0q6rgex+NjUfqFUE="
+              "CodeSha256": "fgkeOkIWD9y5bKmNFJBpCSiGFPQ08xL8n7zDppyzits="
             }
           },
-          "ReceiverEventSourceMappingSQSServerlesspythonbetaSqsQueue": {
+          "ReceiverEventSourceMappingSQSMySqsQueue": {
             "Type": "AWS::Lambda::EventSourceMapping",
             "DependsOn": [
               "IamRoleLambdaExecution"
@@ -223,7 +226,10 @@
             "Properties": {
               "BatchSize": 10,
               "EventSourceArn": {
-                "Fn::ImportValue": "serverless-python-beta:SqsQueue"
+                "Fn::GetAtt": [
+                  "MySqsQueue",
+                  "Arn"
+                ]
               },
               "FunctionName": {
                 "Fn::GetAtt": [
@@ -232,6 +238,74 @@
                 ]
               },
               "Enabled": true
+            }
+          },
+          "MySqsQueue": {
+            "Type": "AWS::SQS::Queue"
+          },
+          "MySnsTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+              "Subscription": [
+                {
+                  "Protocol": "sqs",
+                  "Endpoint": {
+                    "Fn::GetAtt": [
+                      "MySqsQueue",
+                      "Arn"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "SnsToSqsPolicy": {
+            "Type": "AWS::SQS::QueuePolicy",
+            "Properties": {
+              "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Sid": "Allow SNS publish to SQS",
+                    "Effect": "Allow",
+                    "Principal": "*",
+                    "Resource": {
+                      "Fn::GetAtt": [
+                        "MySqsQueue",
+                        "Arn"
+                      ]
+                    },
+                    "Action": "SQS:SendMessage",
+                    "Condition": {
+                      "ArnEquals": {
+                        "aws:SourceArn": {
+                          "Ref": "MySnsTopic"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "Queues": [
+                {
+                  "Ref": "MySqsQueue"
+                }
+              ]
+            }
+          },
+          "QueueSubcription": {
+            "Type": "AWS::SNS::Subscription",
+            "Properties": {
+              "TopicArn": {
+                "Ref": "MySnsTopic"
+              },
+              "Endpoint": {
+                "Fn::GetAtt": [
+                  "MySqsQueue",
+                  "Arn"
+                ]
+              },
+              "Protocol": "sqs"
             }
           }
         },
@@ -244,7 +318,7 @@
           "ReceiverLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ReceiverLambdaVersionmqmrwov9cjrUNM5UPVeH5iZcNDJHgmpycJQPw7k68bE"
+              "Ref": "ReceiverLambdaVersiona2bCGNx0JnDjFQ5e4Td8iTp73oYmeM9iDW38erQU"
             }
           }
         }
@@ -353,8 +427,81 @@
         "timeout": 6,
         "runtime": "python3.7",
         "vpc": {},
-        "versionLogicalId": "ReceiverLambdaVersionmqmrwov9cjrUNM5UPVeH5iZcNDJHgmpycJQPw7k68bE"
+        "versionLogicalId": "ReceiverLambdaVersiona2bCGNx0JnDjFQ5e4Td8iTp73oYmeM9iDW38erQU"
       }
+    },
+    "resources": {
+      "Resources": {
+        "MySqsQueue": {
+          "Type": "AWS::SQS::Queue"
+        },
+        "MySnsTopic": {
+          "Type": "AWS::SNS::Topic",
+          "Properties": {
+            "Subscription": [
+              {
+                "Protocol": "sqs",
+                "Endpoint": {
+                  "Fn::GetAtt": [
+                    "MySqsQueue",
+                    "Arn"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "SnsToSqsPolicy": {
+          "Type": "AWS::SQS::QueuePolicy",
+          "Properties": {
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "Allow SNS publish to SQS",
+                  "Effect": "Allow",
+                  "Principal": "*",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "MySqsQueue",
+                      "Arn"
+                    ]
+                  },
+                  "Action": "SQS:SendMessage",
+                  "Condition": {
+                    "ArnEquals": {
+                      "aws:SourceArn": {
+                        "Ref": "MySnsTopic"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "Queues": [
+              {
+                "Ref": "MySqsQueue"
+              }
+            ]
+          }
+        },
+        "QueueSubcription": {
+          "Type": "AWS::SNS::Subscription",
+          "Properties": {
+            "TopicArn": {
+              "Ref": "MySnsTopic"
+            },
+            "Endpoint": {
+              "Fn::GetAtt": [
+                "MySqsQueue",
+                "Arn"
+              ]
+            },
+            "Protocol": "sqs"
+          }
+        }
+      },
+      "Outputs": {}
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
@@ -368,13 +515,16 @@
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
       }
     },
     "isDashboardMonitoringPreconfigured": false,
     "artifact": "/Users/mostafa/Desktop/serverless/serverless-python/.serverless/python-serverless.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/python-serverless/beta/1610561941466-2021-01-13T18:19:01.466Z",
+    "artifactDirectoryName": "serverless/python-serverless/beta/1610629938448-2021-01-14T13:12:18.448Z",
     "artifact": "python-serverless.zip"
   }
 }
