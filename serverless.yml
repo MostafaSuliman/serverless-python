@@ -16,7 +16,7 @@ functions:
     environment:
     events:
       - sqs:
-          arn: !!GetAtt MySqsQueue.Arn
+          arn: !GetAtt MySqsQueue.Arn
 resource:
   Resources:
     MySqsQueue:
